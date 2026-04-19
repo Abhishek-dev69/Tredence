@@ -1,6 +1,6 @@
 import { addEdge, applyEdgeChanges, applyNodeChanges, type Connection, type EdgeChange, type NodeChange } from '@xyflow/react';
 import { create } from 'zustand';
-import type { AutomationAction, SimulateWorkflowResponse } from '@/features/workflow/types/api';
+import type { AutomationAction, SerializedWorkflowGraph, SimulateWorkflowResponse } from '@/features/workflow/types/api';
 import type { ValidationResult } from '@/features/workflow/types/validation';
 import type {
   NodeDataByType,
@@ -9,7 +9,7 @@ import type {
   WorkflowNode,
   WorkflowNodeType,
 } from '@/features/workflow/types/workflow';
-import { serializeWorkflow } from '@/features/workflow/serializers/workflowSerializer';
+import { deserializeWorkflow, serializeWorkflow } from '@/features/workflow/serializers/workflowSerializer';
 import { createEdgeId, createSampleWorkflow, createWorkflowNode } from '@/features/workflow/utils/nodeFactory';
 import { validateWorkflow } from '@/features/workflow/validation/validateWorkflow';
 import { apiClient } from '@/services/api/mockApiClient';
@@ -20,6 +20,8 @@ interface WorkflowStoreState {
   selectedNodeId: string | null;
   automations: AutomationAction[];
   automationsLoading: boolean;
+  draftAvailable: boolean;
+  lastSavedAt: number | null;
   validation: ValidationResult;
   simulationResult: SimulateWorkflowResponse | null;
   sandbox: SandboxState;
@@ -37,6 +39,10 @@ interface WorkflowStoreState {
   deleteEdge: (edgeId: string) => void;
   clearWorkflow: () => void;
   resetToDemo: () => void;
+  importWorkflow: (serializedWorkflow: SerializedWorkflowGraph) => { success: boolean; error?: string };
+  setDraftAvailable: (value: boolean) => void;
+  setLastSavedAt: (value: number | null) => void;
+  setSandboxError: (message: string | null) => void;
   openSandbox: () => void;
   closeSandbox: () => void;
   loadAutomations: () => Promise<void>;
@@ -60,6 +66,8 @@ export const useWorkflowStore = create<WorkflowStoreState>((set, get) => ({
   selectedNodeId: null,
   automations: [],
   automationsLoading: false,
+  draftAvailable: false,
+  lastSavedAt: null,
   validation: initialValidation,
   simulationResult: null,
   sandbox: {
@@ -203,6 +211,54 @@ export const useWorkflowStore = create<WorkflowStoreState>((set, get) => ({
         error: null,
       },
     });
+  },
+
+  importWorkflow: (serializedWorkflow) => {
+    try {
+      const graph = deserializeWorkflow(serializedWorkflow);
+      set({
+        ...withValidation(graph.nodes, graph.edges),
+        selectedNodeId: null,
+        simulationResult: null,
+        sandbox: {
+          isOpen: false,
+          isLoading: false,
+          error: null,
+        },
+      });
+
+      return { success: true };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to import the workflow JSON.';
+      set((state) => ({
+        sandbox: {
+          ...state.sandbox,
+          isOpen: true,
+          isLoading: false,
+          error: message,
+        },
+      }));
+      return { success: false, error: message };
+    }
+  },
+
+  setDraftAvailable: (value) => {
+    set({ draftAvailable: value });
+  },
+
+  setLastSavedAt: (value) => {
+    set({ lastSavedAt: value });
+  },
+
+  setSandboxError: (message) => {
+    set((state) => ({
+      sandbox: {
+        ...state.sandbox,
+        isOpen: message ? true : state.sandbox.isOpen,
+        error: message,
+        isLoading: false,
+      },
+    }));
   },
 
   openSandbox: () => {
