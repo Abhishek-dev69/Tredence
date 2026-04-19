@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, type ChangeEvent } from 'react';
 import { Button } from '@/components/common/Button';
 import { Icon } from '@/components/common/Icons';
 import { WorkflowCanvas } from '@/components/canvas/WorkflowCanvas';
@@ -7,6 +7,7 @@ import { SandboxDrawer } from '@/components/sandbox/SandboxDrawer';
 import { NodePalette } from '@/components/sidebar/NodePalette';
 import { useWorkflowStore } from '@/features/workflow/store/workflowStore';
 import { serializeWorkflow } from '@/features/workflow/serializers/workflowSerializer';
+import { loadWorkflowDraft } from '@/services/api/workflowDraftStorage';
 
 function downloadJsonFile(content: string, filename: string) {
   const blob = new Blob([content], { type: 'application/json' });
@@ -19,14 +20,19 @@ function downloadJsonFile(content: string, filename: string) {
 }
 
 export function AppShell() {
+  const importInputRef = useRef<HTMLInputElement | null>(null);
   const nodes = useWorkflowStore((state) => state.nodes);
   const edges = useWorkflowStore((state) => state.edges);
   const selectedNodeId = useWorkflowStore((state) => state.selectedNodeId);
+  const draftAvailable = useWorkflowStore((state) => state.draftAvailable);
+  const lastSavedAt = useWorkflowStore((state) => state.lastSavedAt);
   const runSimulation = useWorkflowStore((state) => state.runSimulation);
   const resetToDemo = useWorkflowStore((state) => state.resetToDemo);
   const clearWorkflow = useWorkflowStore((state) => state.clearWorkflow);
   const deleteSelectedNode = useWorkflowStore((state) => state.deleteSelectedNode);
   const openSandbox = useWorkflowStore((state) => state.openSandbox);
+  const importWorkflow = useWorkflowStore((state) => state.importWorkflow);
+  const setSandboxError = useWorkflowStore((state) => state.setSandboxError);
   const validation = useWorkflowStore((state) => state.validation);
 
   const summary = useMemo(() => {
@@ -45,6 +51,49 @@ export function AppShell() {
     const payload = serializeWorkflow(nodes, edges);
     downloadJsonFile(JSON.stringify(payload, null, 2), 'hr-workflow-designer-export.json');
   };
+
+  const handleImportClick = () => {
+    importInputRef.current?.click();
+  };
+
+  const handleImportFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      importWorkflow(parsed);
+    } catch {
+      setSandboxError('The selected file is not valid workflow JSON. Export a workflow from this app and try again.');
+    } finally {
+      event.target.value = '';
+    }
+  };
+
+  const handleRestoreDraft = () => {
+    const draft = loadWorkflowDraft();
+    if (!draft) {
+      return;
+    }
+
+    importWorkflow(draft.workflow);
+  };
+
+  const savedAtLabel = useMemo(() => {
+    if (!lastSavedAt) {
+      return null;
+    }
+
+    return new Intl.DateTimeFormat('en-IN', {
+      hour: 'numeric',
+      minute: '2-digit',
+      day: 'numeric',
+      month: 'short',
+    }).format(lastSavedAt);
+  }, [lastSavedAt]);
 
   return (
     <div className="relative min-h-screen overflow-hidden px-4 py-4">
@@ -99,6 +148,16 @@ export function AppShell() {
                 <span className="mr-2 inline-flex"><Icon name="export" className="h-4 w-4" /></span>
                 Export JSON
               </Button>
+              <Button variant="ghost" onClick={handleImportClick}>
+                <span className="mr-2 inline-flex"><Icon name="link" className="h-4 w-4" /></span>
+                Import JSON
+              </Button>
+              {draftAvailable ? (
+                <Button variant="ghost" onClick={handleRestoreDraft}>
+                  <span className="mr-2 inline-flex"><Icon name="clock" className="h-4 w-4" /></span>
+                  Restore Draft
+                </Button>
+              ) : null}
               <Button variant="ghost" onClick={resetToDemo}>
                 Reset Demo
               </Button>
@@ -110,6 +169,14 @@ export function AppShell() {
               </Button>
             </div>
           </div>
+
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/json"
+            className="hidden"
+            onChange={handleImportFile}
+          />
 
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-[26px] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
@@ -148,6 +215,18 @@ export function AppShell() {
                 {validation.isValid ? 'The current flow can be simulated.' : 'Resolve the highlighted issues to continue.'}
               </p>
             </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-200/80">
+            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
+              Local autosave {savedAtLabel ? `active · last saved ${savedAtLabel}` : 'active'}
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
+              JSON import/export supported
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
+              Validation engine covered by tests
+            </span>
           </div>
         </header>
 
