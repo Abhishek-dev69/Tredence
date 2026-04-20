@@ -1,4 +1,4 @@
-import { useMemo, useRef, type ChangeEvent } from 'react';
+import { useRef, type ChangeEvent } from 'react';
 import { Button } from '@/components/common/Button';
 import { Icon } from '@/components/common/Icons';
 import { WorkflowCanvas } from '@/components/canvas/WorkflowCanvas';
@@ -25,7 +25,6 @@ export function AppShell() {
   const edges = useWorkflowStore((state) => state.edges);
   const selectedNodeId = useWorkflowStore((state) => state.selectedNodeId);
   const draftAvailable = useWorkflowStore((state) => state.draftAvailable);
-  const lastSavedAt = useWorkflowStore((state) => state.lastSavedAt);
   const runSimulation = useWorkflowStore((state) => state.runSimulation);
   const resetToDemo = useWorkflowStore((state) => state.resetToDemo);
   const clearWorkflow = useWorkflowStore((state) => state.clearWorkflow);
@@ -33,19 +32,16 @@ export function AppShell() {
   const openSandbox = useWorkflowStore((state) => state.openSandbox);
   const importWorkflow = useWorkflowStore((state) => state.importWorkflow);
   const setSandboxError = useWorkflowStore((state) => state.setSandboxError);
-  const validation = useWorkflowStore((state) => state.validation);
 
-  const summary = useMemo(() => {
-    const startCount = nodes.filter((node) => node.data.type === 'start').length;
-    const endCount = nodes.filter((node) => node.data.type === 'end').length;
-
-    return {
-      startCount,
-      endCount,
-      totalNodes: nodes.length,
-      totalEdges: edges.length,
-    };
-  }, [edges.length, nodes]);
+  const handleOpenSandbox = () => {
+    openSandbox();
+    window.requestAnimationFrame(() => {
+      document.getElementById('simulation-lab')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+  };
 
   const handleExport = () => {
     const payload = serializeWorkflow(nodes, edges);
@@ -81,19 +77,6 @@ export function AppShell() {
 
     importWorkflow(draft.workflow);
   };
-
-  const savedAtLabel = useMemo(() => {
-    if (!lastSavedAt) {
-      return null;
-    }
-
-    return new Intl.DateTimeFormat('en-IN', {
-      hour: 'numeric',
-      minute: '2-digit',
-      day: 'numeric',
-      month: 'short',
-    }).format(lastSavedAt);
-  }, [lastSavedAt]);
 
   return (
     <div className="relative min-h-screen overflow-hidden px-4 py-4">
@@ -152,7 +135,12 @@ export function AppShell() {
                     <Icon name="play" className="h-4 w-4" />
                     <span>Run Simulation</span>
                   </Button>
-                  <Button variant="ghost" size="lg" className="justify-start border-white/10 bg-white text-slate-800" onClick={openSandbox}>
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    className="justify-start border-white/10 bg-white text-slate-800"
+                    onClick={handleOpenSandbox}
+                  >
                     <Icon name="panel" className="h-4 w-4" />
                     <span>Open Sandbox</span>
                   </Button>
@@ -200,17 +188,6 @@ export function AppShell() {
             onChange={handleImportFile}
           />
 
-          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-200/80">
-            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
-              Local autosave {savedAtLabel ? `active · last saved ${savedAtLabel}` : 'active'}
-            </span>
-            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
-              JSON import/export supported
-            </span>
-            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
-              Validation engine covered by tests
-            </span>
-          </div>
         </header>
 
         <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[310px_minmax(0,1fr)_360px]">
