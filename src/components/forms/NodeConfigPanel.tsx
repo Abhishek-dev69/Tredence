@@ -351,9 +351,7 @@ export function NodeConfigPanel() {
         <div className="border-b border-slate-200 pb-4">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-sm">
-                <Icon name="settings" className="h-4 w-4" />
-              </div>
+              <Icon name="settings" className="mt-0.5 h-4 w-4 text-slate-500" />
               <div>
                 <p className="text-lg font-semibold text-slate-900">Configuration</p>
                 <p className="mt-1 text-sm text-slate-500">{getNodeTypeLabel(selectedNode.data.type)}</p>
