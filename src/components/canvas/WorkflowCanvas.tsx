@@ -185,7 +185,7 @@ export function WorkflowCanvas() {
           </div>
         ) : null}
 
-        <div className="pointer-events-none absolute bottom-5 left-5 z-10 hidden rounded-2xl border border-white/80 bg-white/90 px-4 py-3 text-xs text-slate-500 shadow-sm backdrop-blur md:block">
+        <div className="pointer-events-none absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 rounded-2xl border border-white/80 bg-white/90 px-4 py-3 text-xs text-slate-500 shadow-sm backdrop-blur md:block">
           <div className="flex items-center gap-2">
             <Icon name="settings" className="h-4 w-4 text-slate-400" />
             <span>Tip: select a node to edit it, and double-click an edge to remove it.</span>
