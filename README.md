@@ -146,6 +146,12 @@ This makes the workflow easier to inspect during review and mirrors the “test/
 
 ## Architecture Decisions
 
+## Architecture Diagram
+
+![HR Workflow Designer Architecture](docs/diagrams/hr-workflow-designer-architecture.svg)
+
+The diagram above summarizes the core workflow implemented in the app: design the graph, configure nodes, connect steps, validate the structure, and either simulate the workflow or surface validation blockers in the simulation lab.
+
 ### 1. Centralized workflow store with Zustand
 
 The Zustand store owns:
