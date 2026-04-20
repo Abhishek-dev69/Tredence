@@ -99,9 +99,7 @@ export function WorkflowCanvas() {
       <div className="absolute inset-x-4 top-4 z-10 flex flex-wrap items-start justify-between gap-3 rounded-[24px] border border-slate-200/80 bg-white/85 px-4 py-3 shadow-sm backdrop-blur">
         <div>
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-white">
-              <Icon name="flow" className="h-4 w-4" />
-            </div>
+            <Icon name="flow" className="h-4 w-4 text-slate-500" />
             <div>
               <p className="font-heading text-base font-semibold text-slate-950">Workflow canvas</p>
               <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-slate-400">Design surface</p>
@@ -196,9 +194,7 @@ export function WorkflowCanvas() {
 
         <div className="pointer-events-none absolute bottom-5 right-36 z-10 hidden rounded-2xl border border-slate-200 bg-slate-950/95 px-4 py-3 text-xs text-slate-200 shadow-glow lg:block">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
-              <Icon name="spark" className="h-4 w-4" />
-            </div>
+            <Icon name="spark" className="h-4 w-4 text-slate-300" />
             <div>
               <p className="font-semibold text-white">Studio mode</p>
               <p className="mt-1 text-slate-300">Built for clean demos, quick edits, and reviewer walkthroughs.</p>
