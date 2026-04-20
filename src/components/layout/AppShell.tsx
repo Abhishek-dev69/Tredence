@@ -135,38 +135,60 @@ export function AppShell() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 xl:max-w-[420px] xl:justify-end">
-              <Button variant="secondary" className="bg-white text-slate-900" onClick={() => void runSimulation()}>
-                <span className="mr-2 inline-flex"><Icon name="play" className="h-4 w-4" /></span>
-                Run Simulation
-              </Button>
-              <Button variant="ghost" onClick={openSandbox}>
-                <span className="mr-2 inline-flex"><Icon name="panel" className="h-4 w-4" /></span>
-                Open Sandbox
-              </Button>
-              <Button variant="ghost" onClick={handleExport}>
-                <span className="mr-2 inline-flex"><Icon name="export" className="h-4 w-4" /></span>
-                Export JSON
-              </Button>
-              <Button variant="ghost" onClick={handleImportClick}>
-                <span className="mr-2 inline-flex"><Icon name="link" className="h-4 w-4" /></span>
-                Import JSON
-              </Button>
-              {draftAvailable ? (
-                <Button variant="ghost" onClick={handleRestoreDraft}>
-                  <span className="mr-2 inline-flex"><Icon name="clock" className="h-4 w-4" /></span>
-                  Restore Draft
-                </Button>
-              ) : null}
-              <Button variant="ghost" onClick={resetToDemo}>
-                Reset Demo
-              </Button>
-              <Button variant="ghost" onClick={clearWorkflow}>
-                New Workflow
-              </Button>
-              <Button variant="danger" onClick={deleteSelectedNode} disabled={!selectedNodeId}>
-                Delete Selected
-              </Button>
+            <div className="w-full xl:max-w-[500px]">
+              <div className="rounded-[28px] border border-white/10 bg-white/8 p-3 shadow-[0_18px_44px_rgba(15,23,42,0.24)] backdrop-blur-xl">
+                <div className="mb-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-300">Workflow Actions</p>
+                    <p className="mt-1 text-xs text-slate-300/80">Run, manage, import, and reset your current scenario.</p>
+                  </div>
+                  <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-200">
+                    Live
+                  </span>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Button variant="secondary" size="lg" className="justify-start bg-white text-slate-900" onClick={() => void runSimulation()}>
+                    <Icon name="play" className="h-4 w-4" />
+                    <span>Run Simulation</span>
+                  </Button>
+                  <Button variant="ghost" size="lg" className="justify-start border-white/10 bg-white text-slate-800" onClick={openSandbox}>
+                    <Icon name="panel" className="h-4 w-4" />
+                    <span>Open Sandbox</span>
+                  </Button>
+                </div>
+
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <Button variant="ghost" className="justify-start border-white/10 bg-white text-slate-800" onClick={handleExport}>
+                    <Icon name="export" className="h-4 w-4" />
+                    <span>Export JSON</span>
+                  </Button>
+                  <Button variant="ghost" className="justify-start border-white/10 bg-white text-slate-800" onClick={handleImportClick}>
+                    <Icon name="link" className="h-4 w-4" />
+                    <span>Import JSON</span>
+                  </Button>
+                  {draftAvailable ? (
+                    <Button variant="ghost" className="justify-start border-white/10 bg-white text-slate-800" onClick={handleRestoreDraft}>
+                      <Icon name="clock" className="h-4 w-4" />
+                      <span>Restore Draft</span>
+                    </Button>
+                  ) : (
+                    <div className="hidden sm:block" />
+                  )}
+                  <Button variant="ghost" className="justify-start border-white/10 bg-white text-slate-800" onClick={resetToDemo}>
+                    <Icon name="grid" className="h-4 w-4" />
+                    <span>Reset Demo</span>
+                  </Button>
+                  <Button variant="ghost" className="justify-start border-white/10 bg-white text-slate-800" onClick={clearWorkflow}>
+                    <Icon name="spark" className="h-4 w-4" />
+                    <span>New Workflow</span>
+                  </Button>
+                  <Button variant="danger" className="justify-start" onClick={deleteSelectedNode} disabled={!selectedNodeId}>
+                    <Icon name="warning" className="h-4 w-4" />
+                    <span>Delete Selected</span>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -177,45 +199,6 @@ export function AppShell() {
             className="hidden"
             onChange={handleImportFile}
           />
-
-          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-[26px] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-              <div className="flex items-center gap-2 text-slate-200">
-                <Icon name="grid" className="h-4 w-4" />
-                <p className="text-xs font-semibold uppercase tracking-[0.18em]">Workflow Nodes</p>
-              </div>
-              <p className="mt-3 text-3xl font-bold text-white">{summary.totalNodes}</p>
-              <p className="mt-1 text-sm text-slate-200/70">Current steps placed on the canvas.</p>
-            </div>
-            <div className="rounded-[26px] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-              <div className="flex items-center gap-2 text-slate-200">
-                <Icon name="link" className="h-4 w-4" />
-                <p className="text-xs font-semibold uppercase tracking-[0.18em]">Connections</p>
-              </div>
-              <p className="mt-3 text-3xl font-bold text-white">{summary.totalEdges}</p>
-              <p className="mt-1 text-sm text-slate-200/70">Transitions currently linking the process.</p>
-            </div>
-            <div className="rounded-[26px] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-              <div className="flex items-center gap-2 text-slate-200">
-                <Icon name="flow" className="h-4 w-4" />
-                <p className="text-xs font-semibold uppercase tracking-[0.18em]">Process Shape</p>
-              </div>
-              <p className="mt-3 text-3xl font-bold text-white">
-                {summary.startCount} / {summary.endCount}
-              </p>
-              <p className="mt-1 text-sm text-slate-200/70">Start nodes / End nodes in the workflow.</p>
-            </div>
-            <div className="rounded-[26px] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-              <div className="flex items-center gap-2 text-slate-200">
-                <Icon name={validation.isValid ? 'success' : 'warning'} className="h-4 w-4" />
-                <p className="text-xs font-semibold uppercase tracking-[0.18em]">Validation Readiness</p>
-              </div>
-              <p className="mt-3 text-3xl font-bold text-white">{validation.isValid ? 'Ready' : 'Blocked'}</p>
-              <p className="mt-1 text-sm text-slate-200/70">
-                {validation.isValid ? 'The current flow can be simulated.' : 'Resolve the highlighted issues to continue.'}
-              </p>
-            </div>
-          </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-200/80">
             <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 font-medium">
