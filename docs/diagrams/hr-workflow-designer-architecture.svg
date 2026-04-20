@@ -1,0 +1,113 @@
+<svg width="1600" height="560" viewBox="0 0 1600 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="1600" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#F3F7FC"/>
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <linearGradient id="successBg" x1="0" y1="0" x2="0" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0FDF4"/>
+      <stop offset="1" stop-color="#DCFCE7"/>
+    </linearGradient>
+    <linearGradient id="warningBg" x1="0" y1="0" x2="0" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1F2"/>
+      <stop offset="1" stop-color="#FFE4E6"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-40" y="-40" width="360" height="180" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.09"/>
+    </filter>
+    <marker id="flowArrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M2 2L11 7L2 12" stroke="#475569" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .title { font: 700 31px "Inter", "Segoe UI", Arial, sans-serif; fill: #0F172A; }
+      .subtitle { font: 500 15px "Inter", "Segoe UI", Arial, sans-serif; fill: #64748B; }
+      .section-label { font: 700 11px "Inter", "Segoe UI", Arial, sans-serif; fill: #64748B; letter-spacing: 0.18em; text-transform: uppercase; }
+      .card-title { font: 700 22px "Inter", "Segoe UI", Arial, sans-serif; fill: #0F172A; }
+      .card-copy { font: 500 14px "Inter", "Segoe UI", Arial, sans-serif; fill: #475569; }
+      .decision-text { font: 700 18px "Inter", "Segoe UI", Arial, sans-serif; fill: #0F172A; text-anchor: middle; dominant-baseline: middle; }
+      .branch-text { font: 700 12px "Inter", "Segoe UI", Arial, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="560" rx="30" fill="url(#pageBg)"/>
+  <rect x="24" y="24" width="1552" height="512" rx="28" stroke="#D9E3F0" stroke-width="1.5"/>
+
+  <text x="64" y="74" class="title">HR Workflow Designer Architecture</text>
+  <text x="64" y="103" class="subtitle">High-level application flow from workflow creation through validation and simulation output.</text>
+
+  <rect x="64" y="132" width="198" height="34" rx="17" fill="#EAF2FF"/>
+  <text x="87" y="154" class="section-label" style="fill:#31568A;">Frontend workflow system</text>
+
+  <circle cx="86" cy="292" r="13" fill="#0F172A"/>
+
+  <g filter="url(#cardShadow)">
+    <rect x="132" y="236" width="220" height="112" rx="26" fill="url(#cardBg)" stroke="#CBD5E1" stroke-width="1.5"/>
+  </g>
+  <text x="160" y="266" class="section-label">Canvas</text>
+  <text x="160" y="298" class="card-title">Build Workflow</text>
+  <text x="160" y="326" class="card-copy">Drag blocks onto the React Flow canvas</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="404" y="236" width="232" height="112" rx="26" fill="url(#cardBg)" stroke="#CBD5E1" stroke-width="1.5"/>
+  </g>
+  <text x="432" y="266" class="section-label">Inspector</text>
+  <text x="432" y="298" class="card-title">Configure Nodes</text>
+  <text x="432" y="326" class="card-copy">Edit typed fields and node metadata live</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="688" y="236" width="220" height="112" rx="26" fill="url(#cardBg)" stroke="#CBD5E1" stroke-width="1.5"/>
+  </g>
+  <text x="716" y="266" class="section-label">React Flow</text>
+  <text x="716" y="298" class="card-title">Connect Steps</text>
+  <text x="716" y="326" class="card-copy">Create edges that define execution order</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="960" y="236" width="220" height="112" rx="26" fill="url(#cardBg)" stroke="#CBD5E1" stroke-width="1.5"/>
+  </g>
+  <text x="988" y="266" class="section-label">Validation</text>
+  <text x="988" y="298" class="card-title">Validate Workflow</text>
+  <text x="988" y="326" class="card-copy">Check graph rules, reachability, and cycles</text>
+
+  <polygon points="1234,292 1272,254 1310,292 1272,330" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="1272" y="294" class="decision-text">Valid?</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="1360" y="144" width="196" height="112" rx="26" fill="url(#successBg)" stroke="#86EFAC" stroke-width="1.5"/>
+  </g>
+  <text x="1388" y="174" class="section-label">Mock API</text>
+  <text x="1388" y="206" class="card-title">Simulate Workflow</text>
+  <text x="1388" y="234" class="card-copy">Serialize the graph and execute mock steps</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="1360" y="328" width="196" height="112" rx="26" fill="url(#warningBg)" stroke="#FDA4AF" stroke-width="1.5"/>
+  </g>
+  <text x="1388" y="358" class="section-label">Feedback</text>
+  <text x="1388" y="390" class="card-title">Show Validation Errors</text>
+  <text x="1388" y="418" class="card-copy">Surface blockers in the simulation lab</text>
+
+  <rect x="64" y="472" width="292" height="40" rx="20" fill="#FFFFFF" stroke="#D6DFEB" stroke-width="1.5"/>
+  <text x="90" y="497" class="section-label" style="fill:#475569;">Outputs</text>
+  <text x="186" y="497" class="card-copy" style="font-weight:600; fill:#0F172A;">Execution log, serialized graph, and review feedback</text>
+
+  <path d="M99 292H132" stroke="#475569" stroke-width="2.25" stroke-linecap="round" marker-end="url(#flowArrow)"/>
+  <path d="M352 292H404" stroke="#475569" stroke-width="2.25" stroke-linecap="round" marker-end="url(#flowArrow)"/>
+  <path d="M636 292H688" stroke="#475569" stroke-width="2.25" stroke-linecap="round" marker-end="url(#flowArrow)"/>
+  <path d="M908 292H960" stroke="#475569" stroke-width="2.25" stroke-linecap="round" marker-end="url(#flowArrow)"/>
+  <path d="M1180 292H1234" stroke="#475569" stroke-width="2.25" stroke-linecap="round" marker-end="url(#flowArrow)"/>
+
+  <path d="M1310 292H1330C1340 292 1348 284 1348 274V218C1348 208 1354 200 1364 200H1360" stroke="#475569" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#flowArrow)"/>
+  <text x="1318" y="214" class="branch-text">Yes</text>
+
+  <path d="M1310 292H1330C1340 292 1348 300 1348 310V384C1348 394 1354 402 1364 402H1360" stroke="#475569" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#flowArrow)"/>
+  <text x="1321" y="374" class="branch-text">No</text>
+
+  <path d="M1458 256V304" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <circle cx="1566" cy="384" r="15" fill="#FFFFFF" stroke="#0F172A" stroke-width="2.75"/>
+  <circle cx="1566" cy="384" r="7.5" fill="#0F172A"/>
+  <path d="M1556 384H1546" stroke="#475569" stroke-width="2.25" stroke-linecap="round"/>
+</svg>
