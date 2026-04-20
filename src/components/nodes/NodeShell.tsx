@@ -40,6 +40,14 @@ const accentClasses: Record<NodeShellProps['tone'], string> = {
   rose: 'bg-rose-500',
 };
 
+const iconClasses: Record<NodeShellProps['tone'], string> = {
+  emerald: 'text-emerald-600',
+  sky: 'text-sky-600',
+  amber: 'text-amber-600',
+  violet: 'text-violet-600',
+  rose: 'text-rose-600',
+};
+
 const handleClasses: Record<NodeShellProps['tone'], string> = {
   emerald: '!bg-emerald-500',
   sky: '!bg-sky-500',
@@ -91,7 +99,7 @@ export function NodeShell({
 
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
-          <div className={cn('flex h-11 w-11 items-center justify-center rounded-2xl text-white shadow-sm', accentClasses[tone])}>
+          <div className={cn('mt-0.5', iconClasses[tone])}>
             {icon}
           </div>
           <div>
